@@ -52,8 +52,9 @@ func main() {
 	// Generate HTML
 	htmlOutput := renderHTML(entries)
 
-	// Write to tmp.html in target directory
-	outputPath := filepath.Join(absPath, "tmp.html")
+	// Write to tmp.html in the parent directory of the target
+	parentDir := filepath.Dir(absPath)
+	outputPath := filepath.Join(parentDir, "tmp.html")
 	err = os.WriteFile(outputPath, []byte(htmlOutput), 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing output: %v\n", err)
