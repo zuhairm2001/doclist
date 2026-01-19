@@ -1,6 +1,6 @@
 # doclist
 
-A CLI tool that converts a directory listing to WordPress-ready HTML format.
+A CLI tool that converts a directory listing to an easy listed HTML format.
 
 ## Installation
 
