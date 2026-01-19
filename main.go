@@ -52,9 +52,13 @@ func main() {
 	// Generate HTML
 	htmlOutput := renderHTML(entries)
 
-	// Write to tmp.html in the parent directory of the target
+	// Write to <first10chars>.html in the parent directory of the target
 	parentDir := filepath.Dir(absPath)
-	outputPath := filepath.Join(parentDir, "tmp.html")
+	dirName := filepath.Base(absPath)
+	if len(dirName) > 10 {
+		dirName = dirName[:10]
+	}
+	outputPath := filepath.Join(parentDir, dirName+".html")
 	err = os.WriteFile(outputPath, []byte(htmlOutput), 0644)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error writing output: %v\n", err)
@@ -108,11 +112,13 @@ func walkDirectory(root string) ([]dirEntry, error) {
 		} else {
 			// It's a file - add to parent directory
 			parentPath, _ := filepath.Rel(root, filepath.Dir(path))
+
+			// Skip files in the root directory
 			if parentPath == "." {
-				parentPath = rootName
-			} else {
-				parentPath = filepath.Join(rootName, parentPath)
+				return nil
 			}
+
+			parentPath = filepath.Join(rootName, parentPath)
 
 			// Ensure parent directory is tracked
 			if !dirSeen[parentPath] {
